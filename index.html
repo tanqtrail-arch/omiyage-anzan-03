@@ -20,16 +20,8 @@ const { useState, useEffect, useRef, useCallback } = React;
 const TRAIL_API = 'https://trail-game-pro-3-2.onrender.com';
 const TRAIL_PLAYER = new URLSearchParams(location.search).get('player') || null;
 
-function calcAlt(score) {
-  if (score >= 2000) return 20;
-  if (score >= 1000) return 15;
-  if (score >= 500) return 10;
-  return 5;
-}
-
-async function sendResultToTrail(score) {
+async function sendResultToTrail(score, alt) {
   if (!TRAIL_PLAYER) return;
-  const alt = calcAlt(score);
   try {
     await fetch(`${TRAIL_API}/api/external/game-result`, {
       method: 'POST',
@@ -280,7 +272,7 @@ function OmiyageGame(){
     setRankSubmitted(false);setRankSubmitting(false);setRankResult(null);setRankName("");setRankTab("week");
     setScreen("result");
     // TRAIL GP3: send ALT
-    sendResultToTrail(score);
+    sendResultToTrail(score, ca + fa);
   },[currentLevel,correctCount,isTA,totalQ,answered,completedLevels,score]);
 
   const goNext=useCallback(()=>{
@@ -414,7 +406,7 @@ function OmiyageGame(){
         {/* TRAIL GP3 ALT notification */}
         {TRAIL_PLAYER&&(
           <div style={{background:`linear-gradient(135deg,#e0f7fa,#fff8e1)`,borderRadius:12,padding:"14px 18px",border:`2px solid ${C.creamDark}`,marginBottom:16,textAlign:"center",animation:"popIn 0.4s 0.5s ease both"}}>
-            <span style={{fontSize:18,fontWeight:900,color:C.orange}}>🪙 {calcAlt(score)} ALT を獲得！</span>
+            <span style={{fontSize:18,fontWeight:900,color:C.orange}}>🪙 {bd.totalAltEarned} ALT を獲得！</span>
           </div>
         )}
 
